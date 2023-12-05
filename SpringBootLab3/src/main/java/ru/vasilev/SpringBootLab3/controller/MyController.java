@@ -13,6 +13,7 @@ import ru.vasilev.SpringBootLab3.exception.UnsupportedCodeException;
 import ru.vasilev.SpringBootLab3.exception.ValidationFailedException;
 import ru.vasilev.SpringBootLab3.model.*;
 import jakarta.validation.Valid;
+import ru.vasilev.SpringBootLab3.service.ModifyRequestService;
 import ru.vasilev.SpringBootLab3.service.ModifyResponseService;
 import ru.vasilev.SpringBootLab3.service.ValidationService;
 import ru.vasilev.SpringBootLab3.util.DateTimeUtil;
@@ -24,12 +25,15 @@ public class MyController {
 
     private final ValidationService validationService;
     private final ModifyResponseService modifyResponseService;
+    private final ModifyRequestService modifyRequestService;
 
     @Autowired
     public MyController(ValidationService validationService,
-                        @Qualifier("ModifyOperationUidResponseService") ModifyResponseService modifyResponseService) {
+                        @Qualifier("ModifyOperationUidResponseService") ModifyResponseService modifyResponseService,
+                        @Qualifier("ModifySystemTimeRequestService") ModifyRequestService modifyRequestService) {
         this.validationService = validationService;
-        this.modifyResponseService =modifyResponseService;
+        this.modifyResponseService = modifyResponseService;
+        this.modifyRequestService = modifyRequestService;
     }
 
     @PostMapping(value = "/feedback")
@@ -72,6 +76,8 @@ public class MyController {
         }
         modifyResponseService.modify(responce);
         log.info("Modified response: {}", responce);
+        modifyRequestService.modify(request);
+        log.info("Modified request: {}", request);
         return new ResponseEntity<>(responce, HttpStatus.OK);
     }
 }
