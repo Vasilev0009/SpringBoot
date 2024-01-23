@@ -20,7 +20,6 @@ public class StudentController {
 
     @GetMapping("/list")
     public ModelAndView getALlStudents() {
-        log.info("/list -> connection");
         ModelAndView mav = new ModelAndView("list-students");
         mav.addObject("students", studentRepository.findAll());
         return mav;
